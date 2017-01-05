@@ -322,6 +322,27 @@ class AuditReader
         $row = $this->em->getConnection()->fetchAssoc($query, $values);
 
         if (!$row) {
+
+            if ( $id )
+            {
+                if ( is_array($id) == false )
+                    $_entity = $this->em->find($class->name, $id);
+                else
+                {
+                    if ( count($id) == 1 )
+                    {
+                        foreach($id as $key => $value)
+                        {
+                            $key = $this->em->getClassMetadata($class->name)->getFieldForColumn($key);
+                            $_entity = $this->em->getRepository($class->name)->findOneBy(array($key => $value));
+                        }
+                    }
+                }
+
+                if ( $_entity )
+                    return $_entity;
+            }
+
             throw new NoRevisionFoundException($class->name, $id, $revision);
         }
 
