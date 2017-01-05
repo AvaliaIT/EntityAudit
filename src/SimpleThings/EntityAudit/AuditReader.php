@@ -447,6 +447,15 @@ class AuditReader
                             } catch (DeletedException $e) {
                                 $value = null;
                             }
+                             } catch (NoRevisionFoundException $e) {
+                                 // The entity does not have any revision yet. So let's get the actual state of it.
+                                 $value = $this->em->find($targetClass->name, $pk);
+ 
+                                 // The entity can not be found either from revisions nor classic find.
+                                 if (!$value) {
+                                     throw $e;
+                                 }
+                              }		                              }
 
                             $class->reflFields[$field]->setValue($entity, $value);
                         }
