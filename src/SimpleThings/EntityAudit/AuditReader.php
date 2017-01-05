@@ -322,7 +322,6 @@ class AuditReader
         $row = $this->em->getConnection()->fetchAssoc($query, $values);
 
         if (!$row) {
-
             if ( $id )
             {
                 if ( is_array($id) == false )
