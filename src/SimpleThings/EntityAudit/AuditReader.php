@@ -278,8 +278,8 @@ class AuditReader
 
             foreach ($assoc['joinColumnFieldNames'] as $sourceCol) {
                 $tableAlias = $class->isInheritanceTypeJoined() &&
-                    $class->isInheritedAssociation($assoc['fieldName']) &&
-                    !$class->isIdentifier($assoc['fieldName'])
+                $class->isInheritedAssociation($assoc['fieldName']) &&
+                !$class->isIdentifier($assoc['fieldName'])
                     ? 're' // root entity
                     : 'e';
                 $columnList[] = $tableAlias.'.'.$sourceCol;
@@ -466,15 +466,15 @@ class AuditReader
                                 $value = $this->find($targetClass->name, $pk, $revision, array('threatDeletionsAsExceptions' => true));
                             } catch (DeletedException $e) {
                                 $value = null;
-                            } catch (NoRevisionFoundException $e) {
-                                 // The entity does not have any revision yet. So let's get the actual state of it.
-                                 $value = $this->em->find($targetClass->name, $pk);
- 
-                                 // The entity can not be found either from revisions nor classic find.
-                                 if (!$value) {
-                                     throw $e;
-                                 }
-                              }		                              }
+                            }
+                            catch (NoRevisionFoundException $e)
+                            {
+                                // The entity does not have any revision yet. So let's get the actual state of it.
+                                $value = $this->em->find($targetClass->name, $pk);
+                                // The entity can not be found either from revisions nor classic find.
+                                if (!$value)
+                                    throw $e;
+                            }
 
                             $class->reflFields[$field]->setValue($entity, $value);
                         }
@@ -727,7 +727,7 @@ class AuditReader
         }
 
         $query = "SELECT r.* FROM " . $this->config->getRevisionTableName() . " r " .
-                 "INNER JOIN " . $tableName . " e ON r.id = e." . $this->config->getRevisionFieldName() . " WHERE " . $whereSQL . " ORDER BY r.id DESC";
+            "INNER JOIN " . $tableName . " e ON r.id = e." . $this->config->getRevisionFieldName() . " WHERE " . $whereSQL . " ORDER BY r.id DESC";
         $revisionsData = $this->em->getConnection()->fetchAll($query, array_values($id));
 
         $revisions = array();
@@ -780,7 +780,7 @@ class AuditReader
         }
 
         $query = "SELECT e.".$this->config->getRevisionFieldName()." FROM " . $tableName . " e " .
-                        " WHERE " . $whereSQL . " ORDER BY e.".$this->config->getRevisionFieldName()." DESC";
+            " WHERE " . $whereSQL . " ORDER BY e.".$this->config->getRevisionFieldName()." DESC";
         $revision = $this->em->getConnection()->fetchColumn($query, array_values($id));
 
         return $revision;
