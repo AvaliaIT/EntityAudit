@@ -380,7 +380,7 @@ class AuditedCollection implements Collection
         $this->initialize();
 
         if (!isset($this->entities[$offset])) {
-            throw new AuditedCollectionException(sprintf('Offset "%s" is not defined', $offset));
+            return null;
         }
 
         $entity = $this->entities[$offset];
